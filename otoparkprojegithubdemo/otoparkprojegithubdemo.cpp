@@ -1,11 +1,32 @@
-﻿// otoparkprojegithubdemo.cpp : Bu dosya 'main' işlevi içeriyor. Program yürütme orada başlayıp biter.
-//
-
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
 #include <iostream>
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	printf("otopark proje github demo\n");
+	printf("sayi giriniz: ");
+	int sayi;
+	scanf("%d", &sayi);
+	printf("girdiginiz sayi: %d\n", sayi);
+
+
+
+
+	//github değisikligi denemesi
+
+	printf("degisiklik 1\n");
+	
+	printf("degisiklik 2\n");
+	
+
+
+
+
+
+
+
+
 }
 
 // Programı çalıştır: Ctrl + F5 veya Hata Ayıkla > Hata Ayıklamadan Başlat menüsü
