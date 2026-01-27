@@ -1,11 +1,14 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <string.h>
 
 int main() {
     int kap;
     int aracSayisi = 0;
     int secim;
+
     char plaka[10];
+    char otopark[100][10];    // Hafıza oluşturduk aynı plakalı aracı iki sefer alamamak için
 
 
     printf("\n\nOtopark sistemine hosgeldiniz\n\n");
@@ -32,14 +35,37 @@ int main() {
             printf("Araba Girisi Seçildi\n");
             printf("Plaka girin (bosluk kullanmayin): ");
             scanf("%s", plaka);
-            printf("Girilen plaka: %s\n", plaka);
-            aracSayisi++;
+            
+            // --- AYNI PLAKA KONTROLÜ BAŞLIYOR ---
+            int plakaVarMi = 0;
+
+            // Mevcut araç sayısına kadar listeyi tarıyoruz
+            for (int i = 0; i < aracSayisi; i++) {
+				// strcmp 0 olursa iki plaka aynıdır
+                if (strcmp(otopark[i], plaka) == 0) {
+                    plakaVarMi = 1; // Bulduk!
+                    break;  // Aramayı durdur
+                }
+            }
+            // ------------------------------------
+
+            if (plakaVarMi == 1) {
+                printf("HATA: %s plakali arac zaten iceride!\n", plaka);
+            }
+            else {
+                // Listede yoksa, listeye ekle ve sayıyı artır
+                strcpy(otopark[aracSayisi], plaka);
+                aracSayisi++;
+                printf("Giris Basarili. Arac sayisi: %d\n", aracSayisi);
+            }
             break;
 
         case 2:
             printf("Araba cikisi Seçildi\n");
-            printf("Cikarmak istediginiz plaka: %s\n", plaka);
-            if (aracSayisi > 0) aracSayisi--;
+			printf("Cikarmak istediginiz plakayi girin (bosluk kullanmayin): ");
+			scanf("%s", plaka);
+            printf("cikarilan plaka: %s\n", plaka);
+            aracSayisi--;
             break;
 
         case 3:
