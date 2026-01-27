@@ -27,21 +27,21 @@ int main() {
         scanf("%d", &secim);
 
         switch (secim) {
-        case 1:
+        case 1: {
             if (aracSayisi >= kap) {
                 printf("Otopark dolu!\n");
                 break;
             }
-            printf("Araba Girisi Seçildi\n");
+            printf("Araba Girisi Secildi\n");
             printf("Plaka girin (bosluk kullanmayin): ");
             scanf("%s", plaka);
-            
+
             // --- AYNI PLAKA KONTROLÜ BAŞLIYOR ---
             int plakaVarMi = 0;
 
             // Mevcut araç sayısına kadar listeyi tarıyoruz
             for (int i = 0; i < aracSayisi; i++) {
-				// strcmp 0 olursa iki plaka aynıdır
+                // strcmp 0 olursa iki plaka aynıdır
                 if (strcmp(otopark[i], plaka) == 0) {
                     plakaVarMi = 1; // Bulduk!
                     break;  // Aramayı durdur
@@ -59,11 +59,12 @@ int main() {
                 printf("Giris Basarili. Arac sayisi: %d\n", aracSayisi);
             }
             break;
+        }
 
         case 2:
-            printf("Araba cikisi Seçildi\n");
-			printf("Cikarmak istediginiz plakayi girin (bosluk kullanmayin): ");
-			scanf("%s", plaka);
+            printf("Araba cikisi Secildi\n");
+            printf("Cikarmak istediginiz plakayi girin (bosluk kullanmayin): ");
+            scanf("%s", plaka);
             printf("cikarilan plaka: %s\n", plaka);
             aracSayisi--;
             break;
