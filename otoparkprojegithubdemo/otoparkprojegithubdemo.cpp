@@ -1,6 +1,7 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 int main() {
     int kap;
@@ -9,7 +10,8 @@ int main() {
 
     char plaka[10];
     char otopark[100][10];    // Hafıza oluşturduk aynı plakalı aracı iki sefer alamamak için
-
+    int girisSaatleri[100];
+    int girisDakikalari[100];
 
     printf("\n\nOtopark sistemine hosgeldiniz\n\n");
     printf("Otoparkin kapasitesini belirleyiniz:\n");
@@ -55,8 +57,16 @@ int main() {
             else {
                 // Listede yoksa, listeye ekle ve sayıyı artır
                 strcpy(otopark[aracSayisi], plaka);
-                aracSayisi++;
-                printf("Giris Basarili. Arac sayisi: %d\n", aracSayisi);
+                // Saat ve Dakika bilgilerini al ve diziye kaydet
+                printf("Giris saati (0-23): ");
+                scanf("%d", &girisSaatleri[aracSayisi]);
+                printf("Giris dakikasi (0-59): ");
+                scanf("%d", &girisDakikalari[aracSayisi]);
+
+                printf("Kayit Basarili! %s aracı %02d:%02d saatinde giris yapti.\n",
+                    otopark[aracSayisi], girisSaatleri[aracSayisi], girisDakikalari[aracSayisi]);
+
+                aracSayisi++; // Her şey tamamsa araç sayısını artır
             }
             break;
         }
