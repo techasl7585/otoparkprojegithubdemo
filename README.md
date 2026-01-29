@@ -1,5 +1,9 @@
 C KONSOLU İLE OTOPARK SİSTEMİ
 
+c olarak yazılmıştır ama c++ olarak işaretlenmiştir visual studioda 2022de düz c olmadığı için.
+eğer visual studioda çalıştırılmayacaksa en baştaki şu kodu kaldırın: #define _CRT_SECURE_NO_WARNINGS 
+
+
 
 PROJEDE UYGULANAN OTOPARK TARİFESİ EN AŞAĞIDA YAZILMIŞTIR
 
