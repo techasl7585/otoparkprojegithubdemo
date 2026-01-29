@@ -8,11 +8,33 @@ int main() {
     int aracSayisi = 0;
     int secim;
     int toplamKazanc = 0;
+    int toplamGirisYapan = 0;
+    int toplamCikisYapan = 0;
+
 
     char plaka[10];
     char otopark[100][10];    // Hafıza oluşturduk aynı plakalı aracı iki sefer alamamak için
     int girisSaatleri[100];
     int girisDakikalari[100];
+	int cikissaatleri[100];
+	int cikisdakikalari[100];
+
+
+    // Geçmiş kayıtlar için (Arşiv)
+    char gecmisOtopark[100][10];
+    int gecmisGirisS[100], gecmisGirisD[100];
+    int gecmisCikisS[100], gecmisCikisD[100];
+    int gecmisUcret[100];
+    int toplamCikanArac = 0; // Bu sayaç hiç azalmaz, her çıkışta artar
+
+
+
+
+
+
+
+
+
 
     printf("\n\nOtopark sistemine hosgeldiniz\n\n");
     printf("Otoparkin kapasitesini belirleyiniz:\n");
@@ -24,7 +46,7 @@ int main() {
         printf("3-Otopark Durumu\n");
         printf("4-Arac Sorgulama\n");
         printf("5-Gunluk Kazanc Hesaplama\n");
-        printf("6-Kurallara Gore Raporlama\n");
+        printf("6-Raporlama\n");
         printf("0-Programdan cikis\n");
 
         scanf("%d", &secim);
@@ -68,6 +90,7 @@ int main() {
                     otopark[aracSayisi], girisSaatleri[aracSayisi], girisDakikalari[aracSayisi]);
 
                 aracSayisi++; // Her şey tamamsa araç sayısını artır
+                toplamGirisYapan++;
             }
             break;
         }
@@ -93,9 +116,20 @@ int main() {
 				int cikisdakika = 0;
 				int ucret = 0;
 				printf("Arac cikis saati (0-23) giriniz: ");
-				scanf("%d", &cikissaat);
+                scanf("%d", &cikissaat);
 				printf("Arac cikis dakikasi (0-59) giriniz: ");
-				scanf("%d", &cikisdakika);
+                scanf("%d", &cikisdakika);
+
+
+                // --- HAFIZAYA ALMA (ARŞİVLEME) BURADA BAŞLIYOR ---
+                strcpy(gecmisOtopark[toplamCikanArac], otopark[bulundu]);
+                gecmisGirisS[toplamCikanArac] = girisSaatleri[bulundu];
+                gecmisGirisD[toplamCikanArac] = girisDakikalari[bulundu];
+                gecmisCikisS[toplamCikanArac] = cikissaat;
+                gecmisCikisD[toplamCikanArac] = cikisdakika;
+                // ------------------------------------------------
+
+
 
                 // Toplam kalinan saati hesapla (Basit mantik)
                 int farkDakika = (cikissaat * 60 + cikisdakika) - (girisSaatleri[bulundu] * 60 + girisDakikalari[bulundu]);
@@ -117,8 +151,13 @@ int main() {
                     printf("Gece tarifesi uygulandi.\n");
                 }
 
-                printf("Sure: %d saat | Borcunuz: %d TL\n", toplamSaat, ucret);
-                toplamKazanc += ucret; // Kazancı ekle
+                gecmisUcret[toplamCikanArac] = ucret; // Ücreti de hafızaya al
+                toplamCikanArac++; // Arşiv sayacını artır
+                toplamKazanc += ucret;
+
+                printf("Sure: %d saat | Borc: %d TL. Cikis yapildi.\n", toplamSaat, ucret);
+
+
 
                 // Aracı diziden silme (Kaydirma islemi)
                 for (int j = bulundu; j < aracSayisi - 1; j++) {
@@ -127,14 +166,65 @@ int main() {
                     girisDakikalari[j] = girisDakikalari[j + 1];
                 }
                 aracSayisi--;
+                toplamCikisYapan++;
                 }
                 break;
         }
 
         case 3:
-            printf("Otopark Durumu: %d/%d dolu\n", aracSayisi, kap);
+            printf("\nOtopark Durumu: %d/%d dolu\n", aracSayisi, kap);
+			printf("\nIcerideki araclar:\n");
+            for (int i = 0; i < aracSayisi; i++) {
+                printf("%d. Aracin Plakasi: %9s            --Giris saati: %3d:%3d ---   \n", i + 1, otopark[i], girisSaatleri[i], girisDakikalari[i]);
+            }
+            printf("\nCikan araclar:\n");
+            for (int i = 0; i < toplamCikanArac; i++) {
+                printf("%d. Aracin Plakasi: %9s            --Cikis saati: %3d:%3d ---   \n", i + 1, gecmisOtopark[i], gecmisCikisS[i], gecmisCikisD[i]);
+            }
+
+	
             break;
 
+        case 4: {
+            printf("\nSorgulamak istediginiz aracin plakasini giriniz: ");
+            scanf("%9s", plaka);
+
+            int bulunduIndeks = -1; // Değişken ismini karışmaması için değiştirdik
+
+            // Sadece mevcut araçlar içinde ara
+            for (int i = 0; i < aracSayisi; i++) {
+                if (strcmp(otopark[i], plaka) == 0) {
+                    bulunduIndeks = i;
+                    break; // Aracı bulduğumuz an döngüden çıkıyoruz
+                }
+            }
+
+            // SONUÇ GÖSTERME (Döngü bittikten sonra yapılır)
+            if (bulunduIndeks != -1) {
+                printf("\n>>> Arac Otoparkta!\n");
+                printf("Plaka: %s\n", otopark[bulunduIndeks]);
+                printf("Giris Zamani: %02d:%02d\n", girisSaatleri[bulunduIndeks], girisDakikalari[bulunduIndeks]);
+            }
+            else {
+                printf("\n>>> HATA: %s plakali arac otoparkta bulunamadi.\n", plaka);
+            }
+            break;
+        }
+        case 5: {
+
+            printf("\ngunluk kazanc: %d", toplamKazanc);
+
+            break;
+        }
+        case  6:
+        {
+            printf("\n bugun su kadar arac giris yapmistir: %d", toplamGirisYapan);
+            printf("\n bugun su kadar arac cikis yapmistir: %d", toplamCikisYapan);
+			printf("\n bugunki toplam kazanc: %d", toplamKazanc);
+
+            break;
+        }
+              
         case 0:
             printf("Programdan cikiliyor...\n");
             break;
